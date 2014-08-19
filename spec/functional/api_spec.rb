@@ -114,13 +114,13 @@ else
       end
 
       after :all do
-        Net::HTTP.stubbing_enabled = true 
+        Net::HTTP.stubbing_enabled = true
       end
 
       context "for a recurring payment" do
         let(:amount) { { :currency => 'EUR', :value => '1234' } }
         let(:shopper) { { :reference => @reference_id, :email => "#{@reference_id}@example.com" } }
-        let(:bank_account) { { :bic => 'TESTDE01', :iban => 'DE87123456781234567890', :owner_name => "Simon #{@reference_id} Hopper", :country_code => 'DE' } }
+        let(:bank_account) { { :iban => 'DE87123456781234567890', :owner_name => "Simon #{@reference_id} Hopper", :country_code => 'DE' } }
         let(:recurring) { true }
 
         before do
@@ -131,7 +131,7 @@ else
         it "should be received" do
           expect(@payment_response).to be_received
         end
-        
+
         it "captures a payment" do
           response = Adyen::API.capture_payment(@payment_response.psp_reference, { :currency => 'EUR', :value => '1234' })
           expect(response).to be_success
